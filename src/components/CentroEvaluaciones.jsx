@@ -32,13 +32,13 @@ export function CentroEvaluaciones({ onIniciarQuiz, progreso }) {
             letterSpacing: 1.5,
           }}
         >
-          Evaluación Formativa por Competencias
+          Evaluación Formativa por Competencias (200 Reactivos Institucionales)
         </span>
         <h2 style={{ fontSize: "var(--fs-xl)", color: C.text, fontWeight: 700, margin: "4px 0" }}>
           Centro de Evaluaciones Curriculares
         </h2>
         <p style={{ color: C.muted, fontSize: "var(--fs-sm)", marginTop: 4 }}>
-          Selecciona un bloque temático para evaluar tus competencias en cada una de las 4 unidades de aprendizaje o realiza el Examen Global de la asignatura.
+          Banco exhaustivo con <strong>50 ejercicios de examen por cada unidad curricular</strong> (200 reactivos en total). Evalúa tus competencias por unidad o realiza el Examen Global Integral.
         </p>
       </div>
 
@@ -102,34 +102,50 @@ export function CentroEvaluaciones({ onIniciarQuiz, progreso }) {
               </div>
 
               {/* Botones de Inicio */}
-              <div style={{ display: "flex", gap: 6, marginTop: 4 }}>
+              <div style={{ display: "flex", gap: 4, flexWrap: "wrap", marginTop: 4 }}>
                 <button
-                  onClick={() => onIniciarQuiz(cat.id, 10, `Unidad ${idx + 1}: ${cat.nombre}`)}
+                  onClick={() => onIniciarQuiz(cat.id, 10, `Unidad ${idx + 1}: ${cat.nombre} (10 Q)`)}
                   style={{
-                    flex: 1,
-                    padding: "8px 10px",
+                    flex: "1 1 80px",
+                    padding: "7px 6px",
                     borderRadius: 6,
                     background: `${cat.color}22`,
                     border: `1px solid ${cat.color}`,
                     color: cat.color,
-                    fontSize: "var(--fs-xs)",
+                    fontSize: "11px",
                     fontWeight: 600,
                     cursor: "pointer",
                   }}
                 >
-                  📝 Rápido (10 Q)
+                  ⚡ 10 Q
                 </button>
                 <button
-                  onClick={() => onIniciarQuiz(cat.id, qsUnidad.length, `Unidad ${idx + 1}: ${cat.nombre} (Completo)`)}
+                  onClick={() => onIniciarQuiz(cat.id, 25, `Unidad ${idx + 1}: ${cat.nombre} (25 Q)`)}
                   style={{
-                    flex: 1,
-                    padding: "8px 10px",
+                    flex: "1 1 80px",
+                    padding: "7px 6px",
                     borderRadius: 6,
                     background: C.surface2,
                     border: `1px solid ${C.border}`,
                     color: C.text,
-                    fontSize: "var(--fs-xs)",
+                    fontSize: "11px",
                     fontWeight: 600,
+                    cursor: "pointer",
+                  }}
+                >
+                  📝 25 Q
+                </button>
+                <button
+                  onClick={() => onIniciarQuiz(cat.id, qsUnidad.length, `Unidad ${idx + 1}: ${cat.nombre} (Completo 50 Q)`)}
+                  style={{
+                    flex: "1 1 80px",
+                    padding: "7px 6px",
+                    borderRadius: 6,
+                    background: `${cat.color}33`,
+                    border: `1px solid ${cat.color}`,
+                    color: cat.color,
+                    fontSize: "11px",
+                    fontWeight: 700,
                     cursor: "pointer",
                   }}
                 >
@@ -164,18 +180,18 @@ export function CentroEvaluaciones({ onIniciarQuiz, progreso }) {
             </h3>
           </div>
           <p style={{ color: C.muted, fontSize: "var(--fs-sm)", margin: "4px 0 8px" }}>
-            Evaluación integral comprensiva con preguntas aleatorias ponderadas de las 4 unidades curriculares ({QUIZZES.length} reactivos en el banco).
+            Evaluación integral comprensiva con preguntas aleatorias ponderadas de las 4 unidades curriculares ({QUIZZES.length} reactivos en total en el banco).
           </p>
           <div style={{ fontSize: "11px", color: C.muted }}>
             Intentos registrados: <strong>{statsGlobal.intentos}</strong> · Mejor calificación: <strong style={{ color: C.yellow }}>{statsGlobal.mejorPuntaje !== null ? `${statsGlobal.mejorPuntaje}%` : "Sin intentos"}</strong>
           </div>
         </div>
 
-        <div style={{ display: "flex", gap: 8 }}>
+        <div style={{ display: "flex", gap: 8, flexWrap: "wrap" }}>
           <button
-            onClick={() => onIniciarQuiz("global", 15, "Examen Global (15 Preguntas)")}
+            onClick={() => onIniciarQuiz("global", 20, "Examen Global (20 Preguntas)")}
             style={{
-              padding: "10px 18px",
+              padding: "10px 16px",
               borderRadius: 8,
               background: C.yellow,
               border: "none",
@@ -185,10 +201,10 @@ export function CentroEvaluaciones({ onIniciarQuiz, progreso }) {
               cursor: "pointer",
             }}
           >
-            🚀 Iniciar Examen Global (15 Q)
+            🚀 Examen Estándar (20 Q)
           </button>
           <button
-            onClick={() => onIniciarQuiz("global", 25, "Examen Integral Extenso (25 Preguntas)")}
+            onClick={() => onIniciarQuiz("global", 50, "Examen Integral Extenso (50 Preguntas)")}
             style={{
               padding: "10px 14px",
               borderRadius: 8,
@@ -200,7 +216,7 @@ export function CentroEvaluaciones({ onIniciarQuiz, progreso }) {
               cursor: "pointer",
             }}
           >
-            📚 Extenso (25 Q)
+            📚 Integral Extenso (50 Q)
           </button>
         </div>
       </div>
