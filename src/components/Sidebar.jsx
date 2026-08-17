@@ -159,6 +159,19 @@ export function Sidebar({
               <span>Laboratorio de Simulación</span>
             </button>
             <button
+              onClick={() => irAVista("demostraciones")}
+              style={{
+                display: "flex", alignItems: "center", gap: 10,
+                padding: "8px 12px", borderRadius: 6,
+                background: vista === "demostraciones" ? `${C.accent}22` : "transparent",
+                border: "none", color: vista === "demostraciones" ? C.accent : C.text,
+                fontSize: "var(--fs-sm)", fontWeight: 600, cursor: "pointer", textAlign: "left"
+              }}
+            >
+              <span>🧮</span>
+              <span>Simulador de Demostraciones</span>
+            </button>
+            <button
               onClick={() => irAVista("evaluaciones")}
               style={{
                 display: "flex", alignItems: "center", gap: 10,

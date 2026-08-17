@@ -5,6 +5,7 @@ import { DARK, LIGHT, ThemeCtx } from "./ThemeCtx";
 import { Sidebar } from "./components/Sidebar";
 import { VistaTema } from "./components/VistaTema";
 import { Simulador } from "./components/Simulador";
+import { SimuladorDemostraciones } from "./components/SimuladorDemostraciones";
 import { Creditos } from "./components/Creditos";
 import { DocumentosBasicos } from "./components/DocumentosBasicos";
 import { CentroEvaluaciones } from "./components/CentroEvaluaciones";
@@ -408,6 +409,7 @@ function AppContenido() {
           )}
           {vista === "documentos" && <DocumentosBasicos />}
           {vista === "simulador" && <Simulador />}
+          {vista === "demostraciones" && <SimuladorDemostraciones />}
           {vista === "evaluaciones" && (
             <CentroEvaluaciones
               onIniciarQuiz={iniciarQuiz}
