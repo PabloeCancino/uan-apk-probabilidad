@@ -7,6 +7,7 @@ import { VistaTema } from "./components/VistaTema";
 import { Simulador } from "./components/Simulador";
 import { Creditos } from "./components/Creditos";
 import { DocumentosBasicos } from "./components/DocumentosBasicos";
+import { CentroEvaluaciones } from "./components/CentroEvaluaciones";
 import { renderTextWithMath } from "./components/Formula";
 
 // ── CONTEXTO DE TAMAÑO DE FUENTE (7+ niveles de 0.85x a 2.00x) ────────────────
@@ -310,8 +311,12 @@ function AppContenido() {
     return progreso?.ultimoTema || TODOS_TEMAS[0]?.id || "historia_probabilidad";
   });
 
-  const [vista, setVista] = useState("tema"); // "tema" | "simulador" | "quiz_general" | "quiz_modulo" | "creditos"
-  const [moduloQuizId, setModuloQuizId] = useState(null);
+  const [vista, setVista] = useState("tema"); // "tema" | "documentos" | "simulador" | "evaluaciones" | "quiz" | "creditos"
+  const [quizConfig, setQuizConfig] = useState({
+    moduloId: null,
+    nPreguntas: 10,
+    titulo: "Evaluación",
+  });
   const [sidebarAbierto, setSidebarAbierto] = useState(false);
 
   const temaActual = TODOS_TEMAS.find(t => t.id === temaActivoId) || TODOS_TEMAS[0];
@@ -323,14 +328,13 @@ function AppContenido() {
     }
   }, [temaActivoId, vista, temaActual, marcarVisitado]);
 
-  const iniciarQuizModulo = (catId) => {
-    setModuloQuizId(catId);
-    setVista("quiz_modulo");
+  const iniciarQuiz = (moduloId, nPreguntas = 10, titulo = "Evaluación") => {
+    setQuizConfig({ moduloId, nPreguntas, titulo });
+    setVista("quiz");
   };
 
-  const catActual = CATEGORIAS.find(c => c.id === moduloQuizId);
-  const poolModulo = catActual
-    ? QUIZZES.filter(q => q.nivel === catActual.nombre)
+  const poolActivo = quizConfig.moduloId && quizConfig.moduloId !== "global"
+    ? QUIZZES.filter(q => q.nivel === CATEGORIAS.find(c => c.id === quizConfig.moduloId)?.nombre)
     : QUIZZES;
 
   return (
@@ -347,7 +351,10 @@ function AppContenido() {
         aumentarFuente={aumentar}
         reducirFuente={reducir}
         escalaActual={escalaActual}
-        onIniciarQuizModulo={iniciarQuizModulo}
+        onIniciarQuizModulo={(catId) => {
+          const cat = CATEGORIAS.find(c => c.id === catId);
+          iniciarQuiz(catId, 10, `Unidad: ${cat?.nombre || "Módulo"}`);
+        }}
       />
 
       {/* Área Principal de Contenido */}
@@ -394,27 +401,27 @@ function AppContenido() {
         {/* Scrollable Main View */}
         <div style={{ flex: 1, overflowY: "auto", padding: "var(--sp-sm) 0" }}>
           {vista === "tema" && (
-            <VistaTema tema={temaActual} onIniciarQuizModulo={iniciarQuizModulo} />
+            <VistaTema tema={temaActual} onIniciarQuizModulo={(catId) => {
+              const cat = CATEGORIAS.find(c => c.id === catId);
+              iniciarQuiz(catId, 10, `Unidad: ${cat?.nombre || "Módulo"}`);
+            }} />
           )}
           {vista === "documentos" && <DocumentosBasicos />}
           {vista === "simulador" && <Simulador />}
-          {vista === "creditos" && <Creditos />}
-          {vista === "quiz_general" && (
-            <SesionQuiz
-              pool={QUIZZES}
-              nPreguntas={15}
-              guardarQuiz={(a, t) => guardarQuiz(a, t, "global")}
-              onVolver={() => setVista("tema")}
-              tituloModulo="Examen Global"
+          {vista === "evaluaciones" && (
+            <CentroEvaluaciones
+              onIniciarQuiz={iniciarQuiz}
+              progreso={progreso}
             />
           )}
-          {vista === "quiz_modulo" && (
+          {vista === "creditos" && <Creditos />}
+          {vista === "quiz" && (
             <SesionQuiz
-              pool={poolModulo}
-              nPreguntas={10}
-              guardarQuiz={(a, t) => guardarQuiz(a, t, moduloQuizId)}
-              onVolver={() => setVista("tema")}
-              tituloModulo={catActual?.nombre || "Módulo"}
+              pool={poolActivo}
+              nPreguntas={quizConfig.nPreguntas}
+              guardarQuiz={(a, t) => guardarQuiz(a, t, quizConfig.moduloId)}
+              onVolver={() => setVista("evaluaciones")}
+              tituloModulo={quizConfig.titulo}
             />
           )}
         </div>

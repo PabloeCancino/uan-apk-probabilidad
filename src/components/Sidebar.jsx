@@ -159,17 +159,17 @@ export function Sidebar({
               <span>Laboratorio de Simulación</span>
             </button>
             <button
-              onClick={() => irAVista("quiz_general")}
+              onClick={() => irAVista("evaluaciones")}
               style={{
                 display: "flex", alignItems: "center", gap: 10,
                 padding: "8px 12px", borderRadius: 6,
-                background: vista === "quiz_general" ? `${C.yellow}22` : "transparent",
-                border: "none", color: vista === "quiz_general" ? C.yellow : C.text,
+                background: (vista === "evaluaciones" || vista === "quiz_modulo" || vista === "quiz_general") ? `${C.yellow}22` : "transparent",
+                border: "none", color: (vista === "evaluaciones" || vista === "quiz_modulo" || vista === "quiz_general") ? C.yellow : C.text,
                 fontSize: "var(--fs-sm)", fontWeight: 600, cursor: "pointer", textAlign: "left"
               }}
             >
               <span>🎯</span>
-              <span>Examen de Evaluación Global</span>
+              <span>Centro de Evaluaciones</span>
             </button>
           </div>
 
@@ -237,6 +237,23 @@ export function Sidebar({
                         </button>
                       );
                     })}
+                    <button
+                      onClick={() => onIniciarQuizModulo(cat.id)}
+                      style={{
+                        display: "flex", alignItems: "center", gap: 6,
+                        padding: "6px 8px", borderRadius: 4,
+                        background: `${cat.color}15`,
+                        border: `1px dashed ${cat.color}66`,
+                        color: cat.color,
+                        fontSize: "11px",
+                        cursor: "pointer",
+                        marginTop: 4,
+                        fontWeight: 600,
+                      }}
+                    >
+                      <span>📝</span>
+                      <span>Evaluar Unidad (Quiz)</span>
+                    </button>
                   </div>
                 )}
               </div>
