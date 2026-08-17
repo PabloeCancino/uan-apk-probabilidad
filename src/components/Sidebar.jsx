@@ -133,6 +133,19 @@ export function Sidebar({
           {/* Accesos rápidos */}
           <div style={{ display: "flex", flexDirection: "column", gap: 2, marginBottom: 12 }}>
             <button
+              onClick={() => irAVista("documentos")}
+              style={{
+                display: "flex", alignItems: "center", gap: 10,
+                padding: "8px 12px", borderRadius: 6,
+                background: vista === "documentos" ? `${C.accent}22` : "transparent",
+                border: "none", color: vista === "documentos" ? C.accent : C.text,
+                fontSize: "var(--fs-sm)", fontWeight: 600, cursor: "pointer", textAlign: "left"
+              }}
+            >
+              <span>📄</span>
+              <span>Documentos Básicos UAN</span>
+            </button>
+            <button
               onClick={() => irAVista("simulador")}
               style={{
                 display: "flex", alignItems: "center", gap: 10,

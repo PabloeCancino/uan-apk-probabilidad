@@ -6,6 +6,7 @@ import { Sidebar } from "./components/Sidebar";
 import { VistaTema } from "./components/VistaTema";
 import { Simulador } from "./components/Simulador";
 import { Creditos } from "./components/Creditos";
+import { DocumentosBasicos } from "./components/DocumentosBasicos";
 import { renderTextWithMath } from "./components/Formula";
 
 // ── CONTEXTO DE TAMAÑO DE FUENTE (7+ niveles de 0.85x a 2.00x) ────────────────
@@ -395,6 +396,7 @@ function AppContenido() {
           {vista === "tema" && (
             <VistaTema tema={temaActual} onIniciarQuizModulo={iniciarQuizModulo} />
           )}
+          {vista === "documentos" && <DocumentosBasicos />}
           {vista === "simulador" && <Simulador />}
           {vista === "creditos" && <Creditos />}
           {vista === "quiz_general" && (
