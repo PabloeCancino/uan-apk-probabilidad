@@ -85,10 +85,19 @@ export function InlineFormula({ latex }) {
 }
 
 /**
- * renderTextWithMath — Extrae formulas inline \( ... \) y las renderiza con InlineFormula.
+ * renderTextWithMath — Extrae formulas inline \( ... \) y las renderiza con InlineFormula, respetando saltos de línea.
  */
 export function renderTextWithMath(texto) {
   if (!texto || typeof texto !== "string") return texto;
+  const lineas = texto.split("\n");
+  if (lineas.length > 1) {
+    return lineas.map((linea, lIdx) => (
+      <React.Fragment key={lIdx}>
+        {renderTextWithMath(linea)}
+        {lIdx < lineas.length - 1 && <br />}
+      </React.Fragment>
+    ));
+  }
   const partes = texto.split(/(\\\([\s\S]*?\\\))/g);
   return partes.map((parte, idx) => {
     if (parte.startsWith("\\(") && parte.endsWith("\\)")) {

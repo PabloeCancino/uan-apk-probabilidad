@@ -75,7 +75,7 @@ export const CATEGORIAS = [
       {
         id:         "axiomatica_kolmogorov",
         titulo:     "1.4 Axiomas de Kolmogórov y Propiedades",
-        definicion: "Una medida de probabilidad \\(P: \\mathcal{F} \\to [0, 1]\\) es una función de conjunto que satisface los tres axiomas fundamentales de Kolmogórov: (1) No negatividad: \\(P(A) \\ge 0\\) para todo \\(A \\in \\mathcal{F}\\); (2) Normalización: \\(P(\\Omega) = 1\\); (3) \\(\\sigma\\)-aditividad: Para cualquier sucesión de eventos disjuntos dos a dos \\(A_1, A_2, \\dots\\) (donde \\(A_i \\cap A_j = \\emptyset\\) si \\(i \\neq j\\)), se cumple que \\(P(\\bigcup_{i=1}^\\infty A_i) = \\sum_{i=1}^\\infty P(A_i)\\).",
+        definicion: "Una medida de probabilidad \\(P: \\mathcal{F} \\to [0, 1]\\) es una función de conjunto sobre un espacio medible \\((\\Omega, \\mathcal{F})\\) que satisface los tres axiomas fundamentales de Kolmogórov (1933):\n\n• Axioma 1 (No negatividad): Para todo evento \\(A \\in \\mathcal{F}\\), \\(P(A) \\ge 0\\).\n\n• Axioma 2 (Normalización o Certidumbre): La probabilidad del espacio muestral completo es unitaria, \\(P(\\Omega) = 1\\).\n\n• Axioma 3 (\\(\\sigma\\)-aditividad o Aditividad Contable): Para cualquier sucesión de eventos disjuntos dos a dos \\(A_1, A_2, \\dots\\) (donde \\(A_i \\cap A_j = \\emptyset\\) si \\(i \\neq j\\)), se cumple que \\(P(\\bigcup_{i=1}^\\infty A_i) = \\sum_{i=1}^\\infty P(A_i)\\).",
         formula:    "P\\left(\\bigcup_{i=1}^{\\infty} A_i\\right) = \\sum_{i=1}^{\\infty} P(A_i) \\quad \\text{si } A_i \\cap A_j = \\emptyset \\; (i \\neq j)",
         notas: [
           "Probabilidad del complemento: \\(P(A^c) = 1 - P(A)\\); en particular, \\(P(\\emptyset) = 0\\).",
