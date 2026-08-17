@@ -5,7 +5,7 @@ import { InlineFormula } from "./Formula";
 export function VennSVG({ conjuntosInicial = 2, catColor = "#58a6ff" }) {
   const { C } = useContext(ThemeCtx);
   const [numConjuntos, setNumConjuntos] = useState(conjuntosInicial);
-  const [op, setOp] = useState("comp_a");
+  const [op, setOp] = useState("demorgan1");
   const [regionesLibres, setRegionesLibres] = useState(new Set());
   const [modoLibre, setModoLibre] = useState(false);
 
@@ -16,20 +16,22 @@ export function VennSVG({ conjuntosInicial = 2, catColor = "#58a6ff" }) {
 
   // Operaciones completas para 2 eventos (usando regiones atómicas: rA, rB, rAB, rU)
   const ops2 = [
-    { id: "comp_a", label: "Aᶜ = 1 - P(A)", formula: "P(A^c) = 1 - P(A)", exp: "Complemento de A: Todo el espacio muestral Ω excepto el evento A (incluye Solo B y el Exterior).", regs: ["rB", "rU"] },
-    { id: "comp_b", label: "Bᶜ = 1 - P(B)", formula: "P(B^c) = 1 - P(B)", exp: "Complemento de B: Todo el espacio muestral Ω excepto el evento B (incluye Solo A y el Exterior).", regs: ["rA", "rU"] },
+    { id: "demorgan1", label: "(A ∪ B)ᶜ (Ninguno)", formula: "P((A \\cup B)^c) = P(A^c \\cap B^c) = 1 - P(A \\cup B)", exp: "1ª Ley de De Morgan: Ninguno de los dos eventos ocurre. La capa interior de ambos círculos queda totalmente excluida, iluminando solo el exterior en Ω.", regs: ["rU"] },
+    { id: "comp_a", label: "Aᶜ = 1 - P(A)", formula: "P(A^c) = 1 - P(A)", exp: "Complemento de A: Todo el espacio muestral Ω excepto el evento A (ilumina Solo B y el Exterior, círculo A completamente limpio).", regs: ["rB", "rU"] },
+    { id: "comp_b", label: "Bᶜ = 1 - P(B)", formula: "P(B^c) = 1 - P(B)", exp: "Complemento de B: Todo el espacio muestral Ω excepto el evento B (ilumina Solo A y el Exterior, círculo B completamente limpio).", regs: ["rA", "rU"] },
     { id: "union", label: "A ∪ B (Unión)", formula: "P(A \\cup B) = P(A) + P(B) - P(A \\cap B)", exp: "Principio de Inclusión-Exclusión: Ocurrencia de al menos uno de los dos eventos.", regs: ["rA", "rB", "rAB"] },
     { id: "interseccion", label: "A ∩ B (Conjunta)", formula: "P(A \\cap B)", exp: "Probabilidad conjunta: Ocurrencia simultánea de ambos eventos A y B.", regs: ["rAB"] },
     { id: "solo_a", label: "A \\ B (Solo A)", formula: "P(A \\setminus B) = P(A \\cap B^c) = P(A) - P(A \\cap B)", exp: "Ocurrencia exclusiva de A sin que ocurra B.", regs: ["rA"] },
     { id: "solo_b", label: "B \\ A (Solo B)", formula: "P(B \\setminus A) = P(B \\cap A^c) = P(B) - P(A \\cap B)", exp: "Ocurrencia exclusiva de B sin que ocurra A.", regs: ["rB"] },
     { id: "dif_simetrica", label: "A Δ B (Exactamente 1)", formula: "P(A \\Delta B) = P(A \\cup B) - P(A \\cap B)", exp: "Diferencia Simétrica: Ocurre A o ocurre B, pero NO ambos a la vez.", regs: ["rA", "rB"] },
-    { id: "demorgan1", label: "(A ∪ B)ᶜ (Ninguno)", formula: "P((A \\cup B)^c) = P(A^c \\cap B^c) = 1 - P(A \\cup B)", exp: "1ª Ley de De Morgan: Ninguno de los dos eventos ocurre (solo el exterior).", regs: ["rU"] },
     { id: "demorgan2", label: "(A ∩ B)ᶜ (No ambos)", formula: "P((A \\cap B)^c) = P(A^c \\cup B^c) = 1 - P(A \\cap B)", exp: "2ª Ley de De Morgan: No ocurren simultáneamente ambos eventos (todo excepto la intersección).", regs: ["rA", "rB", "rU"] },
     { id: "condicional", label: "P(A | B) (Condicional)", formula: "P(A|B) = \\frac{P(A \\cap B)}{P(B)}", exp: "Probabilidad condicional: El espacio muestral se restringe al evento condicionante B.", regs: ["rAB"], highlightB: true },
   ];
 
-  // Operaciones completas para 3 eventos (usando regiones atómicas: rA, rB, rC, rAB, rAC, rBC, rABC, rU)
+  // Operaciones completas para 3 eventos
   const ops3 = [
+    { id: "ninguno3", label: "(A ∪ B ∪ C)ᶜ", formula: "P((A \\cup B \\cup C)^c) = 1 - P(A \\cup B \\cup C)", exp: "Complemento de la unión triple: Ninguno de los tres eventos ocurre. La capa interior de los 3 círculos queda excluida, iluminando solo el exterior.", regs: ["rU"] },
+    { id: "comp_a3", label: "Aᶜ (No A en 3)", formula: "P(A^c) = 1 - P(A)", exp: "Complemento de A en 3 conjuntos: Todo el espacio muestral excepto A (círculo A completamente limpio).", regs: ["rB", "rC", "rBC", "rU"] },
     { id: "union3", label: "A ∪ B ∪ C (Unión Triple)", formula: "P(A \\cup B \\cup C) = \\sum P(A) - \\sum P(AB) + P(ABC)", exp: "Principio de Inclusión-Exclusión para tres eventos: Al menos uno ocurre.", regs: ["rA", "rB", "rC", "rAB", "rAC", "rBC", "rABC"] },
     { id: "inter3", label: "A ∩ B ∩ C (Intersección)", formula: "P(A \\cap B \\cap C)", exp: "Intersección triple: Ocurrencia simultánea de los tres eventos A, B y C.", regs: ["rABC"] },
     { id: "solo_a3", label: "Solo A", formula: "P(A \\cap B^c \\cap C^c) = P(A \\setminus (B \\cup C))", exp: "Ocurrencia exclusiva de A (ninguno de B ni C).", regs: ["rA"] },
@@ -37,8 +39,6 @@ export function VennSVG({ conjuntosInicial = 2, catColor = "#58a6ff" }) {
     { id: "al_menos_dos", label: "Al menos 2", formula: "P(AB) + P(AC) + P(BC) - 2P(ABC)", exp: "Ocurrencia simultánea de dos o más eventos.", regs: ["rAB", "rAC", "rBC", "rABC"] },
     { id: "exacto_dos", label: "Exactamente 2", formula: "P(AB \\setminus C) + P(AC \\setminus B) + P(BC \\setminus A)", exp: "Ocurrencia de exactamente dos eventos (sin la intersección triple).", regs: ["rAB", "rAC", "rBC"] },
     { id: "distrib", label: "A ∩ (B ∪ C)", formula: "P(A \\cap (B \\cup C)) = P((A \\cap B) \\cup (A \\cap C))", exp: "Propiedad Distributiva: Intersección de A con la unión de B y C.", regs: ["rAB", "rAC", "rABC"] },
-    { id: "comp_a3", label: "Aᶜ (No A en 3)", formula: "P(A^c) = 1 - P(A)", exp: "Complemento de A en 3 conjuntos: Todo el espacio muestral excepto A.", regs: ["rB", "rC", "rBC", "rU"] },
-    { id: "ninguno3", label: "(A ∪ B ∪ C)ᶜ", formula: "P((A \\cup B \\cup C)^c) = 1 - P(A \\cup B \\cup C)", exp: "Complemento de la unión: Ninguno de los tres eventos ocurre.", regs: ["rU"] },
   ];
 
   const opsActuales = numConjuntos === 2 ? ops2 : ops3;
@@ -71,7 +71,7 @@ export function VennSVG({ conjuntosInicial = 2, catColor = "#58a6ff" }) {
         <span style={{ fontSize: "11px", color: C.muted, fontWeight: 600 }}>Diagrama de Venn Probabilístico:</span>
         <div style={{ display: "flex", gap: 4 }}>
           <button
-            onClick={() => { setNumConjuntos(2); setOp("comp_a"); setModoLibre(false); }}
+            onClick={() => { setNumConjuntos(2); setOp("demorgan1"); setModoLibre(false); }}
             style={{
               padding: "3px 8px", borderRadius: 4, fontSize: "10px", fontWeight: 600,
               background: numConjuntos === 2 ? catColor : C.surface2,
@@ -82,7 +82,7 @@ export function VennSVG({ conjuntosInicial = 2, catColor = "#58a6ff" }) {
             2 Eventos (10 Casos)
           </button>
           <button
-            onClick={() => { setNumConjuntos(3); setOp("union3"); setModoLibre(false); }}
+            onClick={() => { setNumConjuntos(3); setOp("ninguno3"); setModoLibre(false); }}
             style={{
               padding: "3px 8px", borderRadius: 4, fontSize: "10px", fontWeight: 600,
               background: numConjuntos === 3 ? catColor : C.surface2,
@@ -114,54 +114,119 @@ export function VennSVG({ conjuntosInicial = 2, catColor = "#58a6ff" }) {
         ))}
       </div>
 
-      {/* Gráfico SVG Interactivo con Regiones Disjuntas */}
+      {/* Gráfico SVG con Motor de Máscaras y Sustracción Exacta */}
       <svg viewBox="0 0 320 200" style={{ width: "100%", height: "auto", background: C.surface, borderRadius: 8, border: `1px solid ${C.border}` }}>
         <defs>
+          {/* Clips y Máscaras para 2 Eventos */}
           <clipPath id="clip2A"><circle cx="120" cy="100" r="55" /></clipPath>
           <clipPath id="clip2B"><circle cx="185" cy="100" r="55" /></clipPath>
 
+          {/* Máscara de Exterior Universal 2 Eventos (rectángulo blanco menos círculos A y B negros) */}
+          <mask id="maskExterior2">
+            <rect x="0" y="0" width="320" height="200" fill="white" />
+            <circle cx="120" cy="100" r="55" fill="black" />
+            <circle cx="185" cy="100" r="55" fill="black" />
+          </mask>
+
+          {/* Máscara Solo A (círculo A blanco menos círculo B negro) */}
+          <mask id="maskSoloA2">
+            <circle cx="120" cy="100" r="55" fill="white" />
+            <circle cx="185" cy="100" r="55" fill="black" />
+          </mask>
+
+          {/* Máscara Solo B (círculo B blanco menos círculo A negro) */}
+          <mask id="maskSoloB2">
+            <circle cx="185" cy="100" r="55" fill="white" />
+            <circle cx="120" cy="100" r="55" fill="black" />
+          </mask>
+
+          {/* Clips y Máscaras para 3 Eventos */}
           <clipPath id="clip3A"><circle cx="125" cy="85" r="48" /></clipPath>
           <clipPath id="clip3B"><circle cx="185" cy="85" r="48" /></clipPath>
           <clipPath id="clip3C"><circle cx="155" cy="130" r="48" /></clipPath>
+
+          {/* Máscara de Exterior Universal 3 Eventos */}
+          <mask id="maskExterior3">
+            <rect x="0" y="0" width="320" height="200" fill="white" />
+            <circle cx="125" cy="85" r="48" fill="black" />
+            <circle cx="185" cy="85" r="48" fill="black" />
+            <circle cx="155" cy="130" r="48" fill="black" />
+          </mask>
+
+          {/* Máscaras de Regiones Exclusivas 3 Eventos */}
+          <mask id="maskSoloA3">
+            <circle cx="125" cy="85" r="48" fill="white" />
+            <circle cx="185" cy="85" r="48" fill="black" />
+            <circle cx="155" cy="130" r="48" fill="black" />
+          </mask>
+          <mask id="maskSoloB3">
+            <circle cx="185" cy="85" r="48" fill="white" />
+            <circle cx="125" cy="85" r="48" fill="black" />
+            <circle cx="155" cy="130" r="48" fill="black" />
+          </mask>
+          <mask id="maskSoloC3">
+            <circle cx="155" cy="130" r="48" fill="white" />
+            <circle cx="125" cy="85" r="48" fill="black" />
+            <circle cx="185" cy="85" r="48" fill="black" />
+          </mask>
+          <mask id="maskAB3">
+            <circle cx="125" cy="85" r="48" fill="white" />
+            <circle cx="155" cy="130" r="48" fill="black" />
+          </mask>
+          <mask id="maskAC3">
+            <circle cx="125" cy="85" r="48" fill="white" />
+            <circle cx="185" cy="85" r="48" fill="black" />
+          </mask>
+          <mask id="maskBC3">
+            <circle cx="185" cy="85" r="48" fill="white" />
+            <circle cx="125" cy="85" r="48" fill="black" />
+          </mask>
         </defs>
 
-        {/* 1. Fondo Universal Ω */}
+        {/* Marco Universal Ω */}
         <rect
           x="8" y="8" width="304" height="184" rx="6"
-          fill={estaActiva("rU") ? `${catColor}55` : "none"}
+          fill="none"
           stroke={C.border} strokeWidth="1.5"
-          onClick={() => toggleRegionLibre("rU")}
-          style={{ cursor: "pointer" }}
         />
         <text x="22" y="26" fill={C.muted} fontSize="13" fontWeight="bold">Ω</text>
 
         {numConjuntos === 2 ? (
           <>
-            {/* Si el exterior rU está activo, limpiamos el interior de A y B para que no hereden el sombreado del fondo */}
+            {/* 1. Sombreado de Exterior rU (corta limpiamente los círculos A y B dejando solo el exterior iluminado) */}
             {estaActiva("rU") && (
-              <>
-                <circle cx="120" cy="100" r="55" fill={C.surface} />
-                <circle cx="185" cy="100" r="55" fill={C.surface} />
-              </>
+              <rect
+                x="8" y="8" width="304" height="184" rx="6"
+                fill={catColor} fillOpacity="0.55"
+                mask="url(#maskExterior2)"
+                onClick={() => toggleRegionLibre("rU")}
+                style={{ cursor: "pointer" }}
+              />
             )}
 
-            {/* Región rA: Solo A */}
+            {/* 2. Región rA (Solo A) */}
             {estaActiva("rA") && (
-              <g clipPath="url(#clip2A)" onClick={() => toggleRegionLibre("rA")} style={{ cursor: "pointer" }}>
-                <rect x="0" y="0" width="320" height="200" fill={catColor} fillOpacity="0.55" />
-                <circle cx="185" cy="100" r="55" fill={C.surface} />
-              </g>
+              <circle
+                cx="120" cy="100" r="55"
+                fill={catColor} fillOpacity="0.6"
+                mask="url(#maskSoloA2)"
+                onClick={() => toggleRegionLibre("rA")}
+                style={{ cursor: "pointer" }}
+              />
             )}
 
-            {/* Región rB: Solo B */}
+            {/* 3. Región rB (Solo B) */}
             {estaActiva("rB") && (
-              <g clipPath="url(#clip2B)" onClick={() => toggleRegionLibre("rB")} style={{ cursor: "pointer" }}>
-                <rect x="0" y="0" width="320" height="200" fill={catColor} fillOpacity="0.55" />
-                <circle cx="120" cy="100" r="55" fill={C.surface} />
-              </g>
+              <circle
+                cx="185" cy="100" r="55"
+                fill={catColor} fillOpacity="0.6"
+                mask="url(#maskSoloB2)"
+                onClick={() => toggleRegionLibre("rB")}
+                style={{ cursor: "pointer" }}
+              />
             )}
 
-            {/* Región rAB: Intersección A ∩ B */}
+            {/* 4. Región rAB (Intersección A ∩ B) */}
             {estaActiva("rAB") && (
               <g clipPath="url(#clip2A)" onClick={() => toggleRegionLibre("rAB")} style={{ cursor: "pointer" }}>
                 <circle cx="185" cy="100" r="55" fill={catColor} fillOpacity="0.85" />
@@ -178,67 +243,72 @@ export function VennSVG({ conjuntosInicial = 2, catColor = "#58a6ff" }) {
           </>
         ) : (
           <>
-            {/* Si el exterior rU está activo en 3 conjuntos, limpiamos A, B y C */}
+            {/* 1. Sombreado de Exterior rU en 3 Eventos (corta A, B y C dejando solo el exterior) */}
             {estaActiva("rU") && (
-              <>
-                <circle cx="125" cy="85" r="48" fill={C.surface} />
-                <circle cx="185" cy="85" r="48" fill={C.surface} />
-                <circle cx="155" cy="130" r="48" fill={C.surface} />
-              </>
+              <rect
+                x="8" y="8" width="304" height="184" rx="6"
+                fill={catColor} fillOpacity="0.55"
+                mask="url(#maskExterior3)"
+                onClick={() => toggleRegionLibre("rU")}
+                style={{ cursor: "pointer" }}
+              />
             )}
 
-            {/* Solo A */}
+            {/* 2. Solo A */}
             {estaActiva("rA") && (
-              <g clipPath="url(#clip3A)">
-                <rect x="0" y="0" width="320" height="200" fill={catColor} fillOpacity="0.5" />
-                <circle cx="185" cy="85" r="48" fill={C.surface} />
-                <circle cx="155" cy="130" r="48" fill={C.surface} />
-              </g>
+              <circle
+                cx="125" cy="85" r="48"
+                fill={catColor} fillOpacity="0.55"
+                mask="url(#maskSoloA3)"
+                onClick={() => toggleRegionLibre("rA")}
+                style={{ cursor: "pointer" }}
+              />
             )}
 
-            {/* Solo B */}
+            {/* 3. Solo B */}
             {estaActiva("rB") && (
-              <g clipPath="url(#clip3B)">
-                <rect x="0" y="0" width="320" height="200" fill={catColor} fillOpacity="0.5" />
-                <circle cx="125" cy="85" r="48" fill={C.surface} />
-                <circle cx="155" cy="130" r="48" fill={C.surface} />
-              </g>
+              <circle
+                cx="185" cy="85" r="48"
+                fill={catColor} fillOpacity="0.55"
+                mask="url(#maskSoloB3)"
+                onClick={() => toggleRegionLibre("rB")}
+                style={{ cursor: "pointer" }}
+              />
             )}
 
-            {/* Solo C */}
+            {/* 4. Solo C */}
             {estaActiva("rC") && (
-              <g clipPath="url(#clip3C)">
-                <rect x="0" y="0" width="320" height="200" fill={catColor} fillOpacity="0.5" />
-                <circle cx="125" cy="85" r="48" fill={C.surface} />
-                <circle cx="185" cy="85" r="48" fill={C.surface} />
-              </g>
+              <circle
+                cx="155" cy="130" r="48"
+                fill={catColor} fillOpacity="0.55"
+                mask="url(#maskSoloC3)"
+                onClick={() => toggleRegionLibre("rC")}
+                style={{ cursor: "pointer" }}
+              />
             )}
 
-            {/* Intersección AB (excluyendo C) */}
+            {/* 5. Intersección AB (excluyendo C si rABC no está) */}
             {estaActiva("rAB") && (
-              <g clipPath="url(#clip3A)">
-                <circle cx="185" cy="85" r="48" fill={catColor} fillOpacity="0.65" />
-                {!estaActiva("rABC") && <circle cx="155" cy="130" r="48" fill={C.surface} />}
-              </g>
-            )}
-
-            {/* Intersección AC (excluyendo B) */}
-            {estaActiva("rAC") && (
-              <g clipPath="url(#clip3A)">
-                <circle cx="155" cy="130" r="48" fill={catColor} fillOpacity="0.65" />
-                {!estaActiva("rABC") && <circle cx="185" cy="85" r="48" fill={C.surface} />}
-              </g>
-            )}
-
-            {/* Intersección BC (excluyendo A) */}
-            {estaActiva("rBC") && (
               <g clipPath="url(#clip3B)">
-                <circle cx="155" cy="130" r="48" fill={catColor} fillOpacity="0.65" />
-                {!estaActiva("rABC") && <circle cx="125" cy="85" r="48" fill={C.surface} />}
+                <circle cx="125" cy="85" r="48" fill={catColor} fillOpacity="0.65" mask={!estaActiva("rABC") ? "url(#maskAB3)" : undefined} />
               </g>
             )}
 
-            {/* Intersección Triple ABC */}
+            {/* 6. Intersección AC (excluyendo B si rABC no está) */}
+            {estaActiva("rAC") && (
+              <g clipPath="url(#clip3C)">
+                <circle cx="125" cy="85" r="48" fill={catColor} fillOpacity="0.65" mask={!estaActiva("rABC") ? "url(#maskAC3)" : undefined} />
+              </g>
+            )}
+
+            {/* 7. Intersección BC (excluyendo A si rABC no está) */}
+            {estaActiva("rBC") && (
+              <g clipPath="url(#clip3C)">
+                <circle cx="185" cy="85" r="48" fill={catColor} fillOpacity="0.65" mask={!estaActiva("rABC") ? "url(#maskBC3)" : undefined} />
+              </g>
+            )}
+
+            {/* 8. Intersección Triple ABC */}
             {estaActiva("rABC") && (
               <g clipPath="url(#clip3A)">
                 <g clipPath="url(#clip3B)">
