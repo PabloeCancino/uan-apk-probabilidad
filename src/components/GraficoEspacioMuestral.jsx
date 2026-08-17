@@ -91,7 +91,7 @@ export function GraficoEspacioMuestral({ catColor = "#58a6ff" }) {
                 <circle key={v} cx={x} cy="45" r="5" fill="#3fb950" stroke="#fff" strokeWidth="1.5" />
               );
             })}
-            <text x="160" y="30" fill="#3fb950" fontSize="10" fontWeight="bold" textAnchor="middle">Masa de Probabilidad P(X = xₖ) > 0</text>
+            <text x="160" y="30" fill="#3fb950" fontSize="10" fontWeight="bold" textAnchor="middle">Masa de Probabilidad P(X = xₖ) &gt; 0</text>
           </g>
         )}
 
