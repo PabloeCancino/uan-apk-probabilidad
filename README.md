@@ -25,7 +25,7 @@ Aplicación interactiva para la enseñanza, modelado y simulación computacional
   7. 🔵 *Diagramas de Venn:* Selector dinámico de 2 y 3 eventos e Inclusión-Exclusión.
   8. 🔢 *Triángulo de Pascal:* Coeficientes combinatorios $\binom{n}{k}$ y desarrollo de binomios.
   9. 📍 *Soporte en $\mathbb{R}$:* Visualizador de medidas continuas, discretas y puntos con medida nula.
-- 📐 **Expresiones Matemáticas KaTeX:** Renderizado riguroso de notación matemática y probabilística ($\mathbb{P}, \mathbb{E}, \operatorname{Var}, \operatorname{Cov}, \Omega, \mathcal{F}$).
+- 📐 **Expresiones Matemáticas KaTeX:** Renderizado riguroso de notación matemática y probabilística ($\mathbb{P}, \mathbb{E}, \text{Var}, \text{Cov}, \Omega, \mathcal{F}$).
 - 🧪 **Banco de Autoevaluación (Quizzes):** 52 reactivos con retroalimentación formativa y solución paso a paso.
 - ♿ **Accesibilidad:** 8 niveles de tamaño de fuente ($0.85\times$ a $2.00\times$) y temas Alto Contraste Oscuro / Claro.
 - 📶 **100% Offline:** Operación autónoma sin requerir conexión a internet tras su instalación.
