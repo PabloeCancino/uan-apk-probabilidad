@@ -1,0 +1,8 @@
+{
+  "appId": "mx.uan.probabilidad",
+  "appName": "Probabilidad UAN",
+  "webDir": "dist",
+  "server": {
+    "androidScheme": "https"
+  }
+}

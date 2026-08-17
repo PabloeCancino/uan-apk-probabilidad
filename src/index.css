@@ -1,0 +1,140 @@
+/* === Fuente institucional === */
+@import url('https://fonts.googleapis.com/css2?family=IBM+Plex+Sans:wght@300;400;500;600;700&family=IBM+Plex+Mono:wght@400;500&display=swap');
+
+/* === Variables CSS — sistema de diseño responsivo === */
+:root {
+  /* Escala de fuente controlada dinámicamente por FontSizeProvider */
+  --font-scale: 1;
+
+  /* Tipografía fluida */
+  --fs-xs:   calc(clamp(9px,  1.7vw, 11px) * var(--font-scale));
+  --fs-sm:   calc(clamp(11px, 2.1vw, 13px) * var(--font-scale));
+  --fs-base: calc(clamp(12px, 2.4vw, 14px) * var(--font-scale));
+  --fs-md:   calc(clamp(13px, 2.7vw, 16px) * var(--font-scale));
+  --fs-lg:   calc(clamp(16px, 3.4vw, 22px) * var(--font-scale));
+  --fs-xl:   calc(clamp(18px, 3.8vw, 26px) * var(--font-scale));
+
+  /* Espaciado fluido */
+  --sp-xs: clamp(6px,  1.5vw, 10px);
+  --sp-sm: clamp(10px, 2vw,   16px);
+  --sp-md: clamp(14px, 3vw,   24px);
+  --sp-lg: clamp(20px, 4vw,   32px);
+
+  /* Tamaño del visualizador SVG */
+  --widget-size: clamp(200px, 45vw, 360px);
+}
+
+/* === Reset === */
+*, *::before, *::after {
+  box-sizing: border-box;
+  margin: 0;
+  padding: 0;
+}
+
+html, body, #root {
+  height: 100%;
+  overflow: hidden;
+}
+
+body {
+  font-family: 'IBM Plex Sans', system-ui, -apple-system, sans-serif;
+  background: #010409;
+  color: #e6edf3;
+  -webkit-font-smoothing: antialiased;
+  -moz-osx-font-smoothing: grayscale;
+  font-size: var(--fs-base);
+  user-select: none;
+}
+
+/* === Scrollbars === */
+::-webkit-scrollbar { width: 6px; height: 6px; }
+::-webkit-scrollbar-track { background: transparent; }
+::-webkit-scrollbar-thumb { background: #30363d; border-radius: 4px; }
+::-webkit-scrollbar-thumb:hover { background: #58a6ff66; }
+
+/* === Animaciones === */
+@keyframes fadeSlideIn {
+  from { opacity: 0; transform: translateY(8px); }
+  to   { opacity: 1; transform: translateY(0); }
+}
+
+@keyframes pulse {
+  0%, 100% { opacity: 1; }
+  50%      { opacity: 0.5; }
+}
+
+/* === Contenedor principal de cada vista === */
+.contenido-vista {
+  width: 100%;
+  max-width: 960px;
+  padding: var(--sp-md) var(--sp-lg);
+  margin: 0 auto;
+}
+
+/* === Grid de VistaTema === */
+.vista-tema-grid {
+  display: grid;
+  grid-template-columns: 1.3fr 1fr;
+  gap: var(--sp-md);
+  align-items: start;
+}
+
+/* === Visualizador Contenedor === */
+.widget-contenedor {
+  width: 100%;
+  min-height: 240px;
+  margin: 0 auto;
+}
+
+/* === Tipografía de VistaTema === */
+.tema-categoria-chip { font-size: var(--fs-xs); }
+.tema-titulo         { font-size: var(--fs-lg); }
+.tema-definicion     { font-size: var(--fs-sm); line-height: 1.8; }
+.tema-nota-texto     { font-size: var(--fs-sm); line-height: 1.7; }
+.tema-nota-label     { font-size: var(--fs-xs); }
+
+/* === Animación de entrada === */
+.fade-slide-in { animation: fadeSlideIn 0.25s ease-out; }
+
+/* === KaTeX overrides === */
+.katex      { color: inherit !important; font-size: 1.05em !important; }
+.katex-html { color: inherit !important; }
+
+/* ═══════════════════════════════════════════
+   BREAKPOINTS
+═══════════════════════════════════════════ */
+
+/* — Tablet (600–900px) — */
+@media (min-width: 600px) and (max-width: 900px) {
+  :root { --widget-size: clamp(220px, 40vw, 320px); }
+  .vista-tema-grid  { grid-template-columns: 1fr; }
+  .contenido-vista  { padding: var(--sp-sm) var(--sp-md); }
+}
+
+/* — Móvil (< 600px) — */
+@media (max-width: 600px) {
+  :root { --widget-size: clamp(200px, 85vw, 340px); }
+
+  .vista-tema-grid { grid-template-columns: 1fr; }
+  .contenido-vista { padding: var(--sp-sm); }
+
+  /* Sidebar → drawer deslizable */
+  .sidebar-panel {
+    position: fixed !important;
+    top: 0; left: 0;
+    height: 100% !important;
+    z-index: 200;
+    transform: translateX(-100%);
+    transition: transform 0.28s cubic-bezier(0.4, 0, 0.2, 1);
+    box-shadow: 4px 0 24px #00000088;
+  }
+  .sidebar-panel.abierto { transform: translateX(0); }
+  .sidebar-overlay       { display: block !important; }
+  .topbar-desktop        { display: none !important; }
+  .topbar-mobile         { display: flex !important; }
+}
+
+/* — Escritorio grande (> 900px) — */
+@media (min-width: 900px) {
+  .contenido-vista { padding: var(--sp-lg) clamp(24px, 4vw, 40px); }
+}
